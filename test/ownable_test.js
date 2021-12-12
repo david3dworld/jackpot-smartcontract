@@ -4,37 +4,27 @@ const { getContracts } = require('./utils');
 contract('Ownable', accounts => {
 
   before(async () => {
-
   });
-
   it('should return true when caller is owner', async () => {
     const jackpot = (await getContracts(accounts)).jackpot;
-
     const isOwner = await jackpot.methods.isOwner().call({ from: accounts[0] });
     assert.equal(true, isOwner);
   });
-
   it('should return owner', async () => {
     const jackpot = (await getContracts(accounts)).jackpot;
-
     let owner = await jackpot.methods.owner().call({ from: accounts[0] });
     assert.equal(accounts[0].toLowerCase(), owner.toLowerCase());
-
     // Should also return the owner properly when called by a non owner account
     owner = await jackpot.methods.owner().call({ from: accounts[2] });
     assert.equal(accounts[0].toLowerCase(), owner.toLowerCase());
   });
-
   it("should return false when caller isn't owner", async () => {
     const jackpot = (await getContracts(accounts)).jackpot;
-
     const isOwner = await jackpot.methods.isOwner().call({ from: accounts[2] });
     assert.equal(false, isOwner);
   });
-
   it('should transfer ownership', async () => {
     const jackpot = (await getContracts(accounts)).jackpot;
-
     await jackpot.methods.transferOwnership(accounts[3]).send({ from: accounts[0] });
     let isOwner = await jackpot.methods.isOwner().call({ from: accounts[3] });
     assert.equal(true, isOwner);
